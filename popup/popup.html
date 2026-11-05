@@ -5,17 +5,21 @@
   <title>PromptSaver</title>
   <style>
     :root {
-      --bg: #1e1e2e;
-      --surface: #282840;
-      --surface2: #313150;
-      --border: #3e3e5e;
-      --text: #e0e0f0;
-      --text-muted: #9090b0;
-      --accent: #7c6fff;
-      --accent-hover: #6a5cef;
-      --danger: #f06070;
-      --success: #40c080;
-      --radius: 8px;
+      --bg: #0F172A;
+      --surface: #1E293B;
+      --surface2: #334155;
+      --border: #475569;
+      --border-subtle: #334155;
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+      --accent: #0D9488;
+      --accent-hover: #0F766E;
+      --danger: #DC2626;
+      --danger-hover: #B91C1C;
+      --success: #059669;
+      --ring: rgba(13,148,136,0.4);
+      --radius: 6px;
+      --radius-pill: 12px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -25,73 +29,140 @@
       min-height: 200px;
       max-height: 520px;
       overflow-y: auto;
-      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       font-size: 13px;
+      line-height: 1.5;
       background: var(--bg);
       color: var(--text);
       padding: 16px;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* Header */
+    /* Scrollbar */
+    body::-webkit-scrollbar { width: 6px; }
+    body::-webkit-scrollbar-track { background: transparent; }
+    body::-webkit-scrollbar-thumb { background: var(--border-subtle); border-radius: 3px; }
+    body::-webkit-scrollbar-thumb:hover { background: var(--border); }
+
+    /* Focus visible ring */
+    :focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    /* ---- Header ---- */
     .header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
     .header h1 {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
+      letter-spacing: -0.01em;
     }
-    .header h1 span.logo { font-size: 20px; }
-    .settings-link {
-      font-size: 12px;
+    .header h1 .logo-icon {
+      display: flex;
+      align-items: center;
       color: var(--accent);
-      text-decoration: none;
-      cursor: pointer;
     }
-    .settings-link:hover { text-decoration: underline; }
+    .settings-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: color 150ms ease, background 150ms ease;
+      border: none;
+      background: none;
+    }
+    .settings-link:hover {
+      color: var(--text);
+      background: var(--surface);
+    }
 
-    /* Search */
+    /* ---- Site badge ---- */
+    .site-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 16px;
+      letter-spacing: 0.01em;
+    }
+    .site-badge.active {
+      background: rgba(5, 150, 105, 0.1);
+      color: var(--success);
+    }
+    .site-badge.inactive {
+      background: rgba(220, 38, 38, 0.08);
+      color: var(--danger);
+    }
+    .site-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .site-badge.active .dot { background: var(--success); }
+    .site-badge.inactive .dot { background: var(--danger); }
+
+    /* ---- Search ---- */
     .search-wrap {
       position: relative;
       margin-bottom: 12px;
     }
-    .search-wrap input {
-      width: 100%;
-      padding: 8px 10px 8px 32px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      background: var(--surface);
-      color: var(--text);
-      font-size: 13px;
-      outline: none;
-    }
-    .search-wrap input:focus { border-color: var(--accent); }
     .search-wrap .icon {
       position: absolute;
       left: 10px;
       top: 50%;
       transform: translateY(-50%);
       color: var(--text-muted);
-      font-size: 14px;
+      display: flex;
+      align-items: center;
+      pointer-events: none;
+    }
+    .search-wrap input {
+      width: 100%;
+      padding: 8px 12px 8px 34px;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 200ms ease;
+    }
+    .search-wrap input::placeholder { color: var(--text-muted); }
+    .search-wrap input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--ring);
     }
 
-    /* Prompt list */
+    /* ---- Prompt list ---- */
     .prompt-list { list-style: none; }
     .prompt-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 9px 10px;
-      margin-bottom: 6px;
+      padding: 10px 12px;
+      margin-bottom: 4px;
       background: var(--surface);
-      border: 1px solid var(--border);
+      border: 1px solid transparent;
       border-radius: var(--radius);
-      transition: background 0.15s;
+      transition: background 150ms ease;
       cursor: default;
     }
     .prompt-item:hover { background: var(--surface2); }
@@ -102,148 +173,183 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      color: var(--text);
     }
     .prompt-trigger {
       display: inline-block;
-      margin-top: 3px;
-      padding: 2px 6px;
+      margin-top: 4px;
+      padding: 2px 8px;
       font-size: 11px;
-      font-family: "Cascadia Code", "Fira Code", monospace;
+      font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-weight: 500;
       background: var(--surface2);
       border-radius: 4px;
       color: var(--accent);
+      letter-spacing: 0.02em;
     }
     .prompt-actions {
       display: flex;
-      gap: 4px;
+      gap: 2px;
       margin-left: 8px;
+      flex-shrink: 0;
     }
     .prompt-actions button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
       background: none;
       border: none;
       cursor: pointer;
       color: var(--text-muted);
-      font-size: 14px;
-      padding: 2px 4px;
-      border-radius: 4px;
+      border-radius: var(--radius);
+      transition: color 150ms ease, background 150ms ease;
     }
-    .prompt-actions button:hover { color: var(--text); background: var(--surface2); }
-    .prompt-actions button.delete:hover { color: var(--danger); }
+    .prompt-actions button:hover {
+      color: var(--text);
+      background: var(--surface2);
+    }
+    .prompt-actions button.delete:hover {
+      color: var(--danger);
+      background: rgba(220, 38, 38, 0.1);
+    }
 
-    /* Empty state */
+    /* ---- Empty state ---- */
     .empty {
       text-align: center;
       color: var(--text-muted);
-      padding: 28px 10px;
+      padding: 32px 16px;
     }
-    .empty p { margin-top: 6px; font-size: 12px; }
+    .empty .empty-icon {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 12px;
+      color: var(--border);
+    }
+    .empty p {
+      font-size: 12px;
+      line-height: 1.6;
+    }
 
-    /* Site status badge */
-    .site-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 11px;
-      padding: 4px 8px;
-      border-radius: 12px;
-      margin-bottom: 14px;
-    }
-    .site-badge.active {
-      background: rgba(64, 192, 128, 0.12);
-      color: var(--success);
-    }
-    .site-badge.inactive {
-      background: rgba(240, 96, 112, 0.12);
-      color: var(--danger);
-    }
-    .site-badge .dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      display: inline-block;
-    }
-    .site-badge.active .dot { background: var(--success); }
-    .site-badge.inactive .dot { background: var(--danger); }
-
-    /* Footer button */
+    /* ---- Footer / Add button ---- */
     .footer {
-      margin-top: 10px;
-      text-align: center;
+      margin-top: 12px;
     }
     .btn-add {
-      display: inline-flex;
+      display: flex;
       align-items: center;
-      gap: 5px;
-      padding: 8px 18px;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      padding: 9px 16px;
       background: var(--accent);
       color: #fff;
       border: none;
       border-radius: var(--radius);
       font-size: 13px;
       font-weight: 600;
+      font-family: inherit;
       cursor: pointer;
-      transition: background 0.15s;
+      transition: background 150ms ease;
     }
     .btn-add:hover { background: var(--accent-hover); }
+    .btn-add:focus-visible {
+      box-shadow: 0 0 0 3px var(--ring);
+    }
+    .btn-add svg { flex-shrink: 0; }
 
-    /* Quick-add form (inline in popup) */
+    /* ---- Quick-add form ---- */
     .quick-add {
       display: none;
       flex-direction: column;
-      gap: 8px;
-      padding: 12px;
-      margin-top: 10px;
+      gap: 12px;
+      padding: 16px;
+      margin-top: 12px;
       background: var(--surface);
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-subtle);
       border-radius: var(--radius);
     }
     .quick-add.visible { display: flex; }
     .quick-add label {
-      font-size: 12px;
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
       color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
     }
     .quick-add input,
     .quick-add textarea {
       width: 100%;
-      padding: 7px 9px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
+      padding: 8px 10px;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
       background: var(--bg);
       color: var(--text);
       font-size: 13px;
+      font-family: inherit;
       outline: none;
+      transition: border-color 200ms ease;
       resize: vertical;
     }
+    .quick-add input::placeholder,
+    .quick-add textarea::placeholder { color: var(--text-muted); }
     .quick-add input:focus,
-    .quick-add textarea:focus { border-color: var(--accent); }
-    .quick-add textarea { min-height: 60px; }
+    .quick-add textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--ring);
+    }
+    .quick-add textarea { min-height: 64px; }
     .quick-add .row {
       display: flex;
-      gap: 8px;
+      gap: 12px;
     }
     .quick-add .row > div { flex: 1; }
     .quick-add .btn-row {
       display: flex;
       gap: 8px;
       justify-content: flex-end;
+      margin-top: 4px;
     }
     .quick-add .btn-row button {
-      padding: 6px 14px;
+      padding: 7px 16px;
       border: none;
-      border-radius: 6px;
+      border-radius: var(--radius);
       font-size: 12px;
       font-weight: 600;
+      font-family: inherit;
       cursor: pointer;
+      transition: background 150ms ease;
     }
-    .btn-save { background: var(--accent); color: #fff; }
+    .btn-save {
+      background: var(--accent);
+      color: #fff;
+    }
     .btn-save:hover { background: var(--accent-hover); }
-    .btn-cancel { background: var(--surface2); color: var(--text); }
-    .btn-cancel:hover { background: var(--border); }
+    .btn-cancel {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle) !important;
+    }
+    .btn-cancel:hover {
+      background: var(--surface2);
+      color: var(--text);
+    }
   </style>
 </head>
 <body>
   <div class="header">
-    <h1><span class="logo">⚡</span> PromptSaver</h1>
-    <a class="settings-link" id="openSettings">Settings</a>
+    <h1>
+      <span class="logo-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      </span>
+      PromptSaver
+    </h1>
+    <a class="settings-link" id="openSettings" title="Settings" role="button" tabindex="0">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </a>
   </div>
 
   <div id="siteBadge" class="site-badge inactive">
@@ -252,13 +358,17 @@
   </div>
 
   <div class="search-wrap">
-    <span class="icon">🔍</span>
+    <span class="icon">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </span>
     <input type="text" id="search" placeholder="Search prompts…" />
   </div>
 
   <ul class="prompt-list" id="promptList"></ul>
   <div class="empty" id="emptyState" style="display:none">
-    <div style="font-size:28px">📝</div>
+    <div class="empty-icon">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+    </div>
     <p>No prompts yet.<br/>Click <b>Add Prompt</b> to create one.</p>
   </div>
 
@@ -266,16 +376,18 @@
   <div class="quick-add" id="quickAdd">
     <div class="row">
       <div>
-        <label>Name</label>
+        <label for="qaName">Name</label>
         <input type="text" id="qaName" placeholder="e.g. Explain" />
       </div>
       <div>
-        <label>Trigger</label>
+        <label for="qaTrigger">Trigger</label>
         <input type="text" id="qaTrigger" placeholder="e.g. !E" />
       </div>
     </div>
-    <label>Prompt text</label>
-    <textarea id="qaBody" placeholder="Enter your prompt…"></textarea>
+    <div>
+      <label for="qaBody">Prompt text</label>
+      <textarea id="qaBody" placeholder="Enter your prompt…"></textarea>
+    </div>
     <div class="btn-row">
       <button class="btn-cancel" id="qaCancel">Cancel</button>
       <button class="btn-save" id="qaSave">Save</button>
@@ -283,10 +395,12 @@
   </div>
 
   <div class="footer">
-    <button class="btn-add" id="btnAdd">＋ Add Prompt</button>
+    <button class="btn-add" id="btnAdd">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add Prompt
+    </button>
   </div>
 
   <script src="popup.js"></script>
 </body>
 </html>
-
