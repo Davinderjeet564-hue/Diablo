@@ -7,13 +7,37 @@ let prompts = [];
 let enabledSites = [];
 let editingId = null;
 
+const ICONS = {
+  edit: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>`,
+  delete: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="m19 6-1 14H6L5 6"/><path d="M10 11v5M14 11v5"/></svg>`,
+  remove: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m18 6-12 12M6 6l12 12"/></svg>`,
+};
+
 /* ============ Tabs ============ */
 $$(".tab").forEach((btn) => {
   btn.addEventListener("click", () => {
     $$(".tab").forEach((t) => t.classList.remove("active"));
+    $$(".tab").forEach((t) => t.setAttribute("aria-selected", "false"));
     $$(".tab-panel").forEach((p) => p.classList.remove("active"));
     btn.classList.add("active");
+    btn.setAttribute("aria-selected", "true");
     $(`#tab-${btn.dataset.tab}`).classList.add("active");
+  });
+
+  btn.addEventListener("keydown", (event) => {
+    const tabs = [...$$(".tab")];
+    const currentIndex = tabs.indexOf(btn);
+    let nextIndex;
+
+    if (event.key === "ArrowRight") nextIndex = (currentIndex + 1) % tabs.length;
+    else if (event.key === "ArrowLeft") nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+    else if (event.key === "Home") nextIndex = 0;
+    else if (event.key === "End") nextIndex = tabs.length - 1;
+    else return;
+
+    event.preventDefault();
+    tabs[nextIndex].focus();
+    tabs[nextIndex].click();
   });
 });
 
@@ -62,8 +86,8 @@ function renderPrompts() {
         <div class="body">${esc(p.body)}</div>
       </div>
       <div class="actions">
-        <button class="edit" data-id="${p.id}" title="Edit">✏️ Edit</button>
-        <button class="delete" data-id="${p.id}" title="Delete">🗑️ Delete</button>
+        <button class="edit" type="button" data-id="${p.id}" title="Edit prompt" aria-label="Edit prompt">${ICONS.edit}<span>Edit</span></button>
+        <button class="delete" type="button" data-id="${p.id}" title="Delete prompt" aria-label="Delete prompt">${ICONS.delete}<span>Delete</span></button>
       </div>`;
     container.appendChild(card);
   }
@@ -150,7 +174,7 @@ function renderSites() {
   for (const s of enabledSites) {
     const li = document.createElement("li");
     li.className = "site-item";
-    li.innerHTML = `<span>${esc(s)}</span><button data-site="${esc(s)}" title="Remove">✕</button>`;
+    li.innerHTML = `<span>${esc(s)}</span><button type="button" data-site="${esc(s)}" title="Remove site" aria-label="Remove site">${ICONS.remove}</button>`;
     list.appendChild(li);
   }
 }

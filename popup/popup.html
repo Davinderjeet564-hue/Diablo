@@ -337,6 +337,246 @@
       background: var(--surface2);
       color: var(--text);
     }
+
+    /* PromptSaver refresh: warm, quiet surfaces with a clear action hierarchy. */
+    :root {
+      color-scheme: light;
+      --bg: #F7F6F1;
+      --surface: #FFFFFF;
+      --surface2: #F0F3EF;
+      --border: #C8D2CC;
+      --border-subtle: #E1E6E1;
+      --text: #202923;
+      --text-muted: #59665E;
+      --accent: #0B6B55;
+      --accent-hover: #075542;
+      --danger: #B42318;
+      --danger-hover: #912018;
+      --success: #176B45;
+      --ring: rgba(11, 107, 85, 0.28);
+      --radius: 10px;
+      --radius-pill: 999px;
+      --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+      --transition: 150ms ease;
+    }
+
+    body {
+      width: min(360px, 100vw);
+      min-height: 220px;
+      max-height: 560px;
+      padding: 18px;
+      font-family: var(--font);
+      font-size: 13px;
+      line-height: 1.5;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    body::-webkit-scrollbar-thumb { background: #C8D2CC; }
+    body::-webkit-scrollbar-thumb:hover { background: #AAB8AF; }
+
+    :focus-visible {
+      outline: 3px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    .header {
+      margin-bottom: 14px;
+      align-items: center;
+    }
+    .header h1 {
+      gap: 10px;
+      font-size: 17px;
+      font-weight: 720;
+      letter-spacing: -0.035em;
+    }
+    .header h1 .logo-icon {
+      width: 34px;
+      height: 34px;
+      justify-content: center;
+      border-radius: 11px;
+      background: #E2F0E9;
+      color: var(--accent);
+    }
+    .settings-link {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border-subtle);
+      border-radius: 11px;
+      background: var(--surface);
+      color: var(--text-muted);
+      transition: color var(--transition), background var(--transition), border-color var(--transition);
+    }
+    .settings-link:hover {
+      color: var(--text);
+      background: var(--surface2);
+      border-color: var(--border);
+    }
+
+    .site-badge {
+      display: flex;
+      width: fit-content;
+      max-width: 100%;
+      align-items: center;
+      margin: 0 0 14px;
+      padding: 5px 10px;
+      border: 1px solid transparent;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+    .site-badge.active {
+      background: #E8F4EC;
+      border-color: #C8E4D1;
+      color: #155B39;
+    }
+    .site-badge.inactive {
+      background: #F0F1ED;
+      border-color: #E0E3DD;
+      color: #4F5C53;
+    }
+    .site-badge .dot { width: 7px; height: 7px; }
+    .site-badge.inactive .dot { background: #66756B; }
+
+    .search-wrap { margin-bottom: 10px; }
+    .search-wrap .icon { left: 12px; color: #66756B; }
+    .search-wrap input {
+      min-height: 42px;
+      padding: 9px 12px 9px 36px;
+      border-color: var(--border-subtle);
+      border-radius: 12px;
+      background: var(--surface);
+      font-size: 13px;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .search-wrap input::placeholder { color: #66756B; }
+    .search-wrap input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--ring);
+    }
+
+    .prompt-list { display: grid; gap: 7px; }
+    .prompt-item {
+      min-height: 64px;
+      padding: 10px 11px 10px 13px;
+      margin: 0;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      background: var(--surface);
+      transition: background var(--transition), border-color var(--transition);
+    }
+    .prompt-item:hover {
+      background: #FBFCFA;
+      border-color: #C8D2CC;
+    }
+    .prompt-name { font-size: 13px; font-weight: 650; letter-spacing: -0.01em; }
+    .prompt-trigger {
+      margin-top: 5px;
+      padding: 2px 7px;
+      border: 1px solid #D6E8DE;
+      border-radius: 6px;
+      background: #EFF7F1;
+      color: #155B39;
+      font-size: 10px;
+      letter-spacing: 0;
+    }
+    .prompt-actions { gap: 3px; margin-left: 6px; }
+    .prompt-actions button {
+      width: 32px;
+      height: 32px;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      color: #59665E;
+      transition: color var(--transition), background var(--transition), border-color var(--transition);
+    }
+    .prompt-actions button:hover {
+      color: var(--text);
+      background: var(--surface2);
+      border-color: var(--border-subtle);
+    }
+    .prompt-actions button.delete:hover {
+      color: var(--danger);
+      background: #FDEDEA;
+      border-color: #F4C9C4;
+    }
+    .prompt-actions button svg { width: 15px; height: 15px; }
+
+    .empty {
+      padding: 25px 16px;
+      border: 1px dashed #D3DCD5;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.55);
+      color: #59665E;
+    }
+    .empty .empty-icon { margin-bottom: 8px; color: #78877D; }
+    .empty p { font-size: 12px; line-height: 1.55; }
+    .empty b { color: var(--text); font-weight: 650; }
+
+    .footer { margin-top: 10px; }
+    .btn-add {
+      min-height: 42px;
+      padding: 10px 16px;
+      border-radius: 11px;
+      background: var(--accent);
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 650;
+      transition: background var(--transition), box-shadow var(--transition);
+    }
+    .btn-add:hover { background: var(--accent-hover); }
+    .btn-add:focus-visible { box-shadow: 0 0 0 3px var(--ring); }
+    .btn-add:active { background: #064A3C; }
+
+    .quick-add {
+      gap: 11px;
+      padding: 14px;
+      margin-top: 10px;
+      border-color: var(--border-subtle);
+      border-radius: 12px;
+      background: var(--surface);
+    }
+    .quick-add label {
+      margin-bottom: 5px;
+      color: #4F5C53;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+    }
+    .quick-add input, .quick-add textarea {
+      min-height: 38px;
+      padding: 8px 10px;
+      border-color: var(--border-subtle);
+      border-radius: 9px;
+      background: #FBFCFA;
+      color: var(--text);
+      font-size: 13px;
+    }
+    .quick-add input::placeholder, .quick-add textarea::placeholder { color: #66756B; }
+    .quick-add input:focus, .quick-add textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--ring);
+    }
+    .quick-add textarea { min-height: 70px; }
+    .quick-add .row { gap: 9px; }
+    .quick-add .row > div { min-width: 0; }
+    .quick-add .btn-row { gap: 7px; }
+    .quick-add .btn-row button {
+      min-height: 36px;
+      padding: 7px 13px;
+      border-radius: 9px;
+      font-size: 12px;
+      transition: background var(--transition), color var(--transition);
+    }
+    .btn-save { background: var(--accent); color: #FFFFFF; }
+    .btn-save:hover { background: var(--accent-hover); }
+    .btn-cancel { color: #4F5C53; border-color: var(--border-subtle) !important; }
+    .btn-cancel:hover { background: var(--surface2); color: var(--text); }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+    }
   </style>
 </head>
 <body>
@@ -347,9 +587,9 @@
       </span>
       PromptSaver
     </h1>
-    <a class="settings-link" id="openSettings" title="Settings" role="button" tabindex="0">
+    <button class="settings-link" id="openSettings" type="button" title="Settings" aria-label="Open settings">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-    </a>
+    </button>
   </div>
 
   <div id="siteBadge" class="site-badge inactive">
@@ -358,10 +598,10 @@
   </div>
 
   <div class="search-wrap">
-    <span class="icon">
+    <span class="icon" aria-hidden="true">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     </span>
-    <input type="text" id="search" placeholder="Search prompts…" />
+    <input type="text" id="search" placeholder="Search prompts…" aria-label="Search prompts" />
   </div>
 
   <ul class="prompt-list" id="promptList"></ul>

@@ -76,12 +76,12 @@ function render(filter = "") {
     li.className = "prompt-item";
     li.innerHTML = `
       <div class="prompt-info">
-        <div class="prompt-name" title="${esc(p.body)}">${esc(p.name)}</div>
+        <div class="prompt-name">${esc(p.name)}</div>
         <span class="prompt-trigger">${esc(p.trigger)}</span>
       </div>
       <div class="prompt-actions">
-        <button class="edit" title="Edit" data-id="${p.id}">${ICONS.edit}</button>
-        <button class="delete" title="Delete" data-id="${p.id}">${ICONS.delete}</button>
+        <button class="edit" type="button" title="Edit prompt" aria-label="Edit prompt" data-id="${p.id}">${ICONS.edit}</button>
+        <button class="delete" type="button" title="Delete prompt" aria-label="Delete prompt" data-id="${p.id}">${ICONS.delete}</button>
       </div>`;
     $list.appendChild(li);
   }

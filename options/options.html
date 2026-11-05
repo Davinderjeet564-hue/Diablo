@@ -423,27 +423,319 @@
     ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* PromptSaver refresh: a warm, calm workspace with functional teal accents. */
+    :root {
+      color-scheme: light;
+      --bg: #F7F6F1;
+      --surface: #FFFFFF;
+      --surface2: #F0F3EF;
+      --border: #C8D2CC;
+      --border-subtle: #E1E6E1;
+      --text: #202923;
+      --text-muted: #59665E;
+      --accent: #0B6B55;
+      --accent-hover: #075542;
+      --danger: #B42318;
+      --danger-hover: #912018;
+      --success: #176B45;
+      --ring: rgba(11, 107, 85, 0.28);
+      --radius: 10px;
+      --radius-pill: 999px;
+      --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+      --transition: 150ms ease;
+      --transition-slow: 200ms ease;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 14px;
+    }
+    body::before { height: 3px; background: var(--accent); }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: #C8D2CC; }
+    ::-webkit-scrollbar-thumb:hover { background: #AAB8AF; }
+
+    :focus-visible {
+      outline: 3px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    .container {
+      max-width: 760px;
+      padding: 48px 28px 72px;
+    }
+    h1 {
+      gap: 12px;
+      margin-bottom: 6px;
+      font-size: clamp(26px, 4vw, 32px);
+      font-weight: 720;
+      letter-spacing: -0.045em;
+    }
+    .header-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      background: #E2F0E9;
+      color: var(--accent);
+    }
+    .header-icon svg { width: 22px; height: 22px; stroke: currentColor; }
+    .subtitle {
+      margin: 0 0 30px 54px;
+      color: #59665E;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .tabs {
+      gap: 4px;
+      margin-bottom: 24px;
+      padding: 4px;
+      border: 1px solid #E1E6E1;
+      border-radius: 13px;
+      background: #ECEFEA;
+    }
+    .tab {
+      min-height: 42px;
+      padding: 9px 14px;
+      border-radius: 9px;
+      color: #536057;
+      font-size: 13px;
+      font-weight: 600;
+      transition: color var(--transition), background var(--transition), box-shadow var(--transition);
+    }
+    .tab:hover { color: var(--text); }
+    .tab:focus-visible { outline-offset: -3px; }
+    .tab.active {
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: 0 1px 2px rgba(32, 41, 35, 0.08);
+    }
+    .tab-panel.active { animation: fadeIn 160ms ease-out; }
+
+    .card {
+      padding: 20px;
+      margin-bottom: 14px;
+      border-color: var(--border-subtle);
+      border-radius: 14px;
+      background: var(--surface);
+      transition: border-color var(--transition);
+    }
+    .card:hover { border-color: #CBD5CE; }
+
+    label {
+      margin-bottom: 6px;
+      color: #4F5C53;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+    input[type="text"], textarea {
+      min-height: 42px;
+      padding: 9px 12px;
+      border-color: #D8E0D9;
+      border-radius: 9px;
+      background: #FBFCFA;
+      color: var(--text);
+      font-size: 14px;
+      transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+    }
+    input[type="text"]::placeholder, textarea::placeholder { color: #66756B; }
+    input[type="text"]:hover, textarea:hover { border-color: #BCC9C0; }
+    input[type="text"]:focus, textarea:focus,
+    input[type="text"]:focus-visible, textarea:focus-visible {
+      border-color: var(--accent);
+      background: #FFFFFF;
+      box-shadow: 0 0 0 3px var(--ring);
+    }
+    textarea { min-height: 104px; line-height: 1.6; }
+    .field { margin-bottom: 14px; }
+    .row { gap: 14px; }
+
+    .prompt-card {
+      gap: 20px;
+      margin-bottom: 12px;
+      padding: 18px 20px;
+    }
+    .prompt-card .name {
+      margin-bottom: 6px;
+      font-size: 15px;
+      font-weight: 680;
+      letter-spacing: -0.015em;
+    }
+    .prompt-card .trigger {
+      margin-bottom: 10px;
+      padding: 3px 8px;
+      border-color: #D6E8DE;
+      border-radius: 6px;
+      background: #EFF7F1;
+      color: #155B39;
+      font-size: 11px;
+    }
+    .prompt-card .body {
+      color: #4F5C53;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+    .prompt-card .actions { gap: 6px; }
+    .prompt-card .actions button {
+      min-height: 36px;
+      justify-content: center;
+      gap: 7px;
+      padding: 7px 10px;
+      border-color: var(--border-subtle);
+      border-radius: 9px;
+      color: #4F5C53;
+      font-size: 12px;
+      font-weight: 600;
+      transition: background var(--transition), color var(--transition), border-color var(--transition);
+    }
+    .prompt-card .actions button:hover {
+      background: var(--surface2);
+      color: var(--text);
+      border-color: var(--border);
+    }
+    .prompt-card .actions button svg { width: 14px; height: 14px; }
+    .prompt-card .actions button.delete:hover {
+      color: var(--danger);
+      border-color: #F0C3BE;
+      background: #FDEDEA;
+    }
+
+    .btn {
+      min-height: 40px;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px 15px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 650;
+      transition: background var(--transition), color var(--transition), border-color var(--transition), box-shadow var(--transition);
+    }
+    .btn-primary { background: var(--accent); color: #FFFFFF; }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-ghost {
+      background: #FFFFFF;
+      color: #4F5C53;
+      border-color: var(--border-subtle);
+    }
+    .btn-ghost:hover { background: var(--surface2); color: var(--text); border-color: var(--border); }
+    .btn-danger { background: var(--danger); color: #FFFFFF; }
+    .btn-danger:hover { background: var(--danger-hover); }
+    .btn-row { gap: 9px; margin-top: 18px; }
+    #showAddForm { min-height: 42px; }
+    #addForm { border-top: 3px solid #B7D9C7; }
+
+    .site-item {
+      min-height: 52px;
+      padding: 8px 10px 8px 14px;
+      border-color: var(--border-subtle);
+      border-radius: 11px;
+      background: var(--surface);
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .site-item:hover { border-color: #C8D2CC; background: #FBFCFA; }
+    .site-item span { color: #29372F; font-size: 13px; }
+    .site-item button {
+      width: 34px;
+      height: 34px;
+      justify-content: center;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      color: #59665E;
+      transition: color var(--transition), background var(--transition), border-color var(--transition);
+    }
+    .site-item button:hover { color: var(--danger); background: #FDEDEA; border-color: #F4C9C4; }
+    .add-site-row { gap: 10px; margin-top: 14px; }
+    .add-site-row input { min-width: 0; }
+
+    .section-title { margin-bottom: 6px; font-size: 16px; font-weight: 680; letter-spacing: -0.015em; }
+    .section-desc { margin-bottom: 14px; color: #59665E; font-size: 13px; line-height: 1.65; }
+    .danger-card { border-color: #E9C9C4; background: #FFFCFB; }
+    .danger-card:hover { border-color: #DFA9A2; }
+    .danger-card .section-title { color: #9F261D; }
+
+    #tab-data.active {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    #tab-data .card { margin: 0; }
+    #tab-data .danger-card { grid-column: 1 / -1; }
+
+    .empty-state {
+      padding: 42px 20px;
+      border: 1px dashed #D3DCD5;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.55);
+      color: #59665E;
+    }
+    .empty-state .icon { color: #78877D; }
+    .empty-state p { font-size: 14px; line-height: 1.6; }
+    .empty-state b { color: var(--text); font-weight: 650; }
+    code {
+      padding: 2px 6px;
+      border: 1px solid #D6E8DE;
+      border-radius: 5px;
+      background: #EFF7F1;
+      color: #155B39;
+      font-size: 12px;
+    }
+
+    .toast {
+      right: 24px;
+      bottom: 24px;
+      padding: 11px 16px;
+      border: 1px solid #075542;
+      border-radius: 10px;
+      background: #0B6B55;
+      color: #FFFFFF;
+      box-shadow: 0 6px 20px rgba(32, 41, 35, 0.16);
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 34px 18px 48px; }
+      .subtitle { margin-left: 0; }
+      .prompt-card { gap: 12px; padding: 16px; }
+      .prompt-card .actions button { padding: 7px 8px; }
+    }
+    @media (max-width: 480px) {
+      .tabs { gap: 2px; }
+      .tab { padding: 8px 6px; font-size: 12px; }
+      .row { flex-direction: column; gap: 0; }
+      #tab-data.active { grid-template-columns: 1fr; }
+      #tab-data .danger-card { grid-column: auto; }
+      .prompt-card { flex-direction: column; }
+      .prompt-card .actions { width: 100%; flex-direction: row; }
+      .prompt-card .actions button { flex: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>
       <span class="header-icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0D9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
       </span>
       PromptSaver Settings
     </h1>
     <p class="subtitle">Manage your prompts, enabled sites, and data.</p>
 
     <!-- Tabs -->
-    <div class="tabs">
-      <button class="tab active" data-tab="prompts">Prompts</button>
-      <button class="tab" data-tab="sites">Enabled Sites</button>
-      <button class="tab" data-tab="data">Import / Export</button>
+    <div class="tabs" role="tablist" aria-label="Settings sections">
+      <button class="tab active" id="tab-button-prompts" type="button" role="tab" aria-selected="true" aria-controls="tab-prompts" data-tab="prompts">Prompts</button>
+      <button class="tab" id="tab-button-sites" type="button" role="tab" aria-selected="false" aria-controls="tab-sites" data-tab="sites">Enabled Sites</button>
+      <button class="tab" id="tab-button-data" type="button" role="tab" aria-selected="false" aria-controls="tab-data" data-tab="data">Import / Export</button>
     </div>
 
     <!-- ====== PROMPTS TAB ====== -->
-    <div class="tab-panel active" id="tab-prompts">
+    <div class="tab-panel active" id="tab-prompts" role="tabpanel" aria-labelledby="tab-button-prompts" tabindex="0">
       <button class="btn btn-primary" id="showAddForm">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         Add Prompt
@@ -480,7 +772,7 @@
     </div>
 
     <!-- ====== SITES TAB ====== -->
-    <div class="tab-panel" id="tab-sites">
+    <div class="tab-panel" id="tab-sites" role="tabpanel" aria-labelledby="tab-button-sites" tabindex="0">
       <p class="section-desc" style="margin-bottom:16px">
         Prompts will only expand on these domains. Add a domain like <code>chatgpt.com</code>.
       </p>
@@ -492,7 +784,7 @@
     </div>
 
     <!-- ====== DATA TAB ====== -->
-    <div class="tab-panel" id="tab-data">
+    <div class="tab-panel" id="tab-data" role="tabpanel" aria-labelledby="tab-button-data" tabindex="0">
       <div class="card">
         <h3 class="section-title">Export</h3>
         <p class="section-desc">
