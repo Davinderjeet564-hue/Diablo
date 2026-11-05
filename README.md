@@ -31,7 +31,7 @@ Type `!E` in the ChatGPT input box → it instantly becomes **"Explain the follo
 
 ## How It Works
 
-The extension injects a small content script that listens for `input` events on the active page. When you type a registered trigger at the end of an input field, the trigger text is replaced with the full saved prompt. It works with both standard `<input>`/`<textarea>` elements and `contenteditable` editors (used by ChatGPT, Claude, etc.).
+The extension injects a small content script that listens for `input` events on the active page. When you type a registered trigger at the end of an input field, the trigger text is replaced with the full saved prompt. It works with both standard `<input>`/`<textarea>` elements and `contenteditable` editors (used by ChatGPT, Claude, Gemini, Copilot, etc.).
 
 ## File Structure
 
