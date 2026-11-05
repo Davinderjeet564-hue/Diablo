@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PromptSaver – Settings</title>
+  <style>
+    :root {
+      --bg: #121220;
+      --surface: #1e1e2e;
+      --surface2: #282840;
+      --border: #3e3e5e;
+      --text: #e0e0f0;
+      --text-muted: #9090b0;
+      --accent: #7c6fff;
+      --accent-hover: #6a5cef;
+      --danger: #f06070;
+      --danger-hover: #d44c5c;
+      --success: #40c080;
+      --radius: 10px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 40px 24px;
+    }
+
+    .container { max-width: 680px; margin: 0 auto; }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 24px;
+      gap: 4px;
+    }
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: color 0.15s, border-color 0.15s;
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+    }
+    .tab:hover { color: var(--text); }
+    .tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* Cards */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+
+    /* Form fields */
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    input[type="text"]:focus, textarea:focus { border-color: var(--accent); }
+    textarea { resize: vertical; min-height: 80px; font-family: inherit; }
+
+    .field { margin-bottom: 14px; }
+    .row { display: flex; gap: 12px; }
+    .row > .field { flex: 1; }
+
+    /* Prompt list */
+    .prompt-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .prompt-card .info { flex: 1; min-width: 0; }
+    .prompt-card .name {
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 2px;
+    }
+    .prompt-card .trigger {
+      display: inline-block;
+      padding: 2px 8px;
+      font-size: 12px;
+      font-family: "Cascadia Code", "Fira Code", monospace;
+      background: var(--surface2);
+      border-radius: 4px;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+    .prompt-card .body {
+      font-size: 13px;
+      color: var(--text-muted);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .prompt-card .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .prompt-card .actions button {
+      background: var(--surface2);
+      border: none;
+      color: var(--text-muted);
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: background 0.12s, color 0.12s;
+    }
+    .prompt-card .actions button:hover { background: var(--border); color: var(--text); }
+    .prompt-card .actions button.delete:hover { color: var(--danger); }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 10px 22px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-ghost { background: var(--surface2); color: var(--text); }
+    .btn-ghost:hover { background: var(--border); }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-danger:hover { background: var(--danger-hover); }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    /* Add-prompt form (toggled) */
+    #addForm { display: none; }
+    #addForm.visible { display: block; }
+
+    /* Site list */
+    .site-list { list-style: none; }
+    .site-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+    .site-item span { font-family: "Cascadia Code", "Fira Code", monospace; font-size: 14px; }
+    .site-item button {
+      background: none; border: none; color: var(--text-muted);
+      cursor: pointer; font-size: 16px;
+    }
+    .site-item button:hover { color: var(--danger); }
+    .add-site-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .add-site-row input { flex: 1; }
+
+    /* Import / Export */
+    .ie-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 10px 20px;
+      background: var(--success);
+      color: #fff;
+      font-weight: 600;
+      border-radius: 8px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.3s, transform 0.3s;
+      pointer-events: none;
+      z-index: 999;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 10px;
+      color: var(--text-muted);
+    }
+    .empty-state .icon { font-size: 36px; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>⚡ PromptSaver Settings</h1>
+    <p class="subtitle">Manage your prompts, enabled sites, and data.</p>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" data-tab="prompts">Prompts</button>
+      <button class="tab" data-tab="sites">Enabled Sites</button>
+      <button class="tab" data-tab="data">Import / Export</button>
+    </div>
+
+    <!-- ====== PROMPTS TAB ====== -->
+    <div class="tab-panel active" id="tab-prompts">
+      <button class="btn btn-primary" id="showAddForm">＋ Add Prompt</button>
+
+      <div id="addForm" class="card" style="margin-top:16px">
+        <div class="row">
+          <div class="field">
+            <label for="fName">Name</label>
+            <input type="text" id="fName" placeholder="e.g. Explain" />
+          </div>
+          <div class="field">
+            <label for="fTrigger">Trigger / Shortcut</label>
+            <input type="text" id="fTrigger" placeholder="e.g. !E" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="fBody">Prompt Text</label>
+          <textarea id="fBody" placeholder="Enter your full prompt here…"></textarea>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-ghost" id="cancelAdd">Cancel</button>
+          <button class="btn btn-primary" id="savePrompt">Save Prompt</button>
+        </div>
+      </div>
+
+      <div id="promptContainer" style="margin-top:16px"></div>
+      <div class="empty-state" id="emptyPrompts" style="display:none">
+        <div class="icon">📝</div>
+        <p>No prompts yet. Click <b>Add Prompt</b> to create your first one!</p>
+      </div>
+    </div>
+
+    <!-- ====== SITES TAB ====== -->
+    <div class="tab-panel" id="tab-sites">
+      <p style="color:var(--text-muted);margin-bottom:14px;font-size:13px;">
+        Prompts will only expand on these domains. Add a domain like <code>chatgpt.com</code>.
+      </p>
+      <ul class="site-list" id="siteList"></ul>
+      <div class="add-site-row">
+        <input type="text" id="newSite" placeholder="e.g. chatgpt.com" />
+        <button class="btn btn-primary" id="addSite">Add</button>
+      </div>
+    </div>
+
+    <!-- ====== DATA TAB ====== -->
+    <div class="tab-panel" id="tab-data">
+      <div class="card">
+        <h3 style="margin-bottom:8px">Export</h3>
+        <p style="color:var(--text-muted);font-size:13px;margin-bottom:12px">
+          Download all your prompts and site settings as a JSON file.
+        </p>
+        <button class="btn btn-primary" id="exportBtn">⬇ Export Data</button>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:8px">Import</h3>
+        <p style="color:var(--text-muted);font-size:13px;margin-bottom:12px">
+          Restore prompts and settings from a previously exported file. This will merge with existing data.
+        </p>
+        <input type="file" accept=".json" id="importFile" style="display:none" />
+        <button class="btn btn-ghost" id="importBtn">⬆ Import Data</button>
+      </div>
+      <div class="card" style="border-color:var(--danger)">
+        <h3 style="margin-bottom:8px;color:var(--danger)">Danger Zone</h3>
+        <p style="color:var(--text-muted);font-size:13px;margin-bottom:12px">
+          Delete all prompts and reset settings. This cannot be undone.
+        </p>
+        <button class="btn btn-danger" id="resetBtn">🗑 Reset Everything</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="options.js"></script>
+</body>
+</html>
+

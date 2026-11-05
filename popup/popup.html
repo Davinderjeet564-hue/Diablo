@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PromptSaver</title>
+  <style>
+    :root {
+      --bg: #1e1e2e;
+      --surface: #282840;
+      --surface2: #313150;
+      --border: #3e3e5e;
+      --text: #e0e0f0;
+      --text-muted: #9090b0;
+      --accent: #7c6fff;
+      --accent-hover: #6a5cef;
+      --danger: #f06070;
+      --success: #40c080;
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      width: 360px;
+      min-height: 200px;
+      max-height: 520px;
+      overflow-y: auto;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      font-size: 13px;
+      background: var(--bg);
+      color: var(--text);
+      padding: 16px;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .header h1 {
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .header h1 span.logo { font-size: 20px; }
+    .settings-link {
+      font-size: 12px;
+      color: var(--accent);
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .settings-link:hover { text-decoration: underline; }
+
+    /* Search */
+    .search-wrap {
+      position: relative;
+      margin-bottom: 12px;
+    }
+    .search-wrap input {
+      width: 100%;
+      padding: 8px 10px 8px 32px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 13px;
+      outline: none;
+    }
+    .search-wrap input:focus { border-color: var(--accent); }
+    .search-wrap .icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    /* Prompt list */
+    .prompt-list { list-style: none; }
+    .prompt-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 10px;
+      margin-bottom: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: background 0.15s;
+      cursor: default;
+    }
+    .prompt-item:hover { background: var(--surface2); }
+    .prompt-info { flex: 1; min-width: 0; }
+    .prompt-name {
+      font-weight: 600;
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .prompt-trigger {
+      display: inline-block;
+      margin-top: 3px;
+      padding: 2px 6px;
+      font-size: 11px;
+      font-family: "Cascadia Code", "Fira Code", monospace;
+      background: var(--surface2);
+      border-radius: 4px;
+      color: var(--accent);
+    }
+    .prompt-actions {
+      display: flex;
+      gap: 4px;
+      margin-left: 8px;
+    }
+    .prompt-actions button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 14px;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+    .prompt-actions button:hover { color: var(--text); background: var(--surface2); }
+    .prompt-actions button.delete:hover { color: var(--danger); }
+
+    /* Empty state */
+    .empty {
+      text-align: center;
+      color: var(--text-muted);
+      padding: 28px 10px;
+    }
+    .empty p { margin-top: 6px; font-size: 12px; }
+
+    /* Site status badge */
+    .site-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 12px;
+      margin-bottom: 14px;
+    }
+    .site-badge.active {
+      background: rgba(64, 192, 128, 0.12);
+      color: var(--success);
+    }
+    .site-badge.inactive {
+      background: rgba(240, 96, 112, 0.12);
+      color: var(--danger);
+    }
+    .site-badge .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .site-badge.active .dot { background: var(--success); }
+    .site-badge.inactive .dot { background: var(--danger); }
+
+    /* Footer button */
+    .footer {
+      margin-top: 10px;
+      text-align: center;
+    }
+    .btn-add {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 8px 18px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-add:hover { background: var(--accent-hover); }
+
+    /* Quick-add form (inline in popup) */
+    .quick-add {
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      padding: 12px;
+      margin-top: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+    .quick-add.visible { display: flex; }
+    .quick-add label {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .quick-add input,
+    .quick-add textarea {
+      width: 100%;
+      padding: 7px 9px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 13px;
+      outline: none;
+      resize: vertical;
+    }
+    .quick-add input:focus,
+    .quick-add textarea:focus { border-color: var(--accent); }
+    .quick-add textarea { min-height: 60px; }
+    .quick-add .row {
+      display: flex;
+      gap: 8px;
+    }
+    .quick-add .row > div { flex: 1; }
+    .quick-add .btn-row {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+    .quick-add .btn-row button {
+      padding: 6px 14px;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-save { background: var(--accent); color: #fff; }
+    .btn-save:hover { background: var(--accent-hover); }
+    .btn-cancel { background: var(--surface2); color: var(--text); }
+    .btn-cancel:hover { background: var(--border); }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1><span class="logo">⚡</span> PromptSaver</h1>
+    <a class="settings-link" id="openSettings">Settings</a>
+  </div>
+
+  <div id="siteBadge" class="site-badge inactive">
+    <span class="dot"></span>
+    <span id="siteLabel">Not active on this site</span>
+  </div>
+
+  <div class="search-wrap">
+    <span class="icon">🔍</span>
+    <input type="text" id="search" placeholder="Search prompts…" />
+  </div>
+
+  <ul class="prompt-list" id="promptList"></ul>
+  <div class="empty" id="emptyState" style="display:none">
+    <div style="font-size:28px">📝</div>
+    <p>No prompts yet.<br/>Click <b>Add Prompt</b> to create one.</p>
+  </div>
+
+  <!-- Quick-add form -->
+  <div class="quick-add" id="quickAdd">
+    <div class="row">
+      <div>
+        <label>Name</label>
+        <input type="text" id="qaName" placeholder="e.g. Explain" />
+      </div>
+      <div>
+        <label>Trigger</label>
+        <input type="text" id="qaTrigger" placeholder="e.g. !E" />
+      </div>
+    </div>
+    <label>Prompt text</label>
+    <textarea id="qaBody" placeholder="Enter your prompt…"></textarea>
+    <div class="btn-row">
+      <button class="btn-cancel" id="qaCancel">Cancel</button>
+      <button class="btn-save" id="qaSave">Save</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    <button class="btn-add" id="btnAdd">＋ Add Prompt</button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
+
