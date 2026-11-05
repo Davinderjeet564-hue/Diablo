@@ -57,5 +57,4 @@ promptsaver extension/
 
 ## Privacy
 
-PromptSaver stores everything in `chrome.storage.local`. No data is ever transmitted to any server. No analytics, no tracking, no accounts.
-
+PromptSaver stores your prompts in `chrome.storage.local`. No prompt data is ever transmitted to any server.
